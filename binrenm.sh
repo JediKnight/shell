@@ -29,6 +29,7 @@ function sha1gen()
 
 function incrgen()
 {
+    seq 1 10
 }
 
 function esc()
@@ -63,8 +64,7 @@ done
 
 if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 
-exit
-while f in `find $path -maxdepth $depth -type f -name "*.${ext}"`
+for f in `find $path -maxdepth $depth -type f -name "*.${ext}"`
 do
     org="`esc $f`"
     new="`$fnc $f`.${f##.*}"
