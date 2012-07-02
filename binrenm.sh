@@ -24,7 +24,7 @@ function usage()
 
 function sha1gen()
 {
-    shasum $1
+    shasum $1|cut -d' ' -f1
 }
 
 function incrgen()
@@ -67,7 +67,7 @@ if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 find $path -maxdepth $depth -type f -name "*.${ext}" | while read f
 do
     org="`esc $f`"
-    new="`$fnc $org`.${f##*.}"
+    new="${path}/`$fnc $org`.${f##*.}"
     # if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
     echo "org: $org"
     echo "new: $new"
