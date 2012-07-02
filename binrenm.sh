@@ -24,7 +24,7 @@ function usage()
 
 function sha1gen()
 {
-    shasum $1|cut -d' ' -f1
+    shasum "$1"|cut -d' ' -f1
 }
 
 function incrgen()
@@ -34,7 +34,8 @@ function incrgen()
 
 function esc()
 {
-    echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'
+    # echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'
+    echo "$1"
 }
 
 NONE=0
