@@ -34,8 +34,7 @@ function incrgen()
 
 function esc()
 {
-    # echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'
-    echo "$1"
+    echo `echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'`
 }
 
 NONE=0
