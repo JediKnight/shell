@@ -68,8 +68,5 @@ find $path -maxdepth $depth -type f -name "*.${ext}" | while read f
 do
     org="`esc \"$f\"`"
     new="${path}/`$fnc \"$f\"`.${f##*.}"
-    #if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
-    echo "org: $org"
-    echo "new: $new"
-    echo
+    if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
 done
