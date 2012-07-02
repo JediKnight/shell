@@ -67,7 +67,7 @@ if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 find $path -maxdepth $depth -type f -name "*.${ext}" | while read f
 do
     org="`esc $f`"
-    new="`$fnc $f`.${f##.*}"
+    new="`$fnc $org`.${f##*.}"
     # if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
     echo "org: $org"
     echo "new: $new"
