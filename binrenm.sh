@@ -64,7 +64,7 @@ done
 
 if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 
-for f in `find $path -maxdepth $depth -type f -name "*.${ext}"`
+find $path -maxdepth $depth -type f -name "*.${ext}" | while read f
 do
     org="`esc $f`"
     new="`$fnc $f`.${f##.*}"
