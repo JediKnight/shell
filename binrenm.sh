@@ -6,7 +6,9 @@ function usage()
 
     printf ":: -%-2s%-10s%s\n" 'd' 'maxdepth' '何階層まで探索'
     printf ":: -%-2s%-10s%s\n" 'p' 'path'     '探索ターゲットパス'
-
+    printf ":: -%-2s%-10s%s\n" 'i' ''         'インクリメント'
+    printf ":: -%-2s%-10s%s\n" 's' ''         'sha1'
+    
     printf "\nimage\n"
     printf ":: -%-2s%-10s%s\n" 'g' '' 'gif'
     printf ":: -%-2s%-10s%s\n" 'j' '' 'jpg'
@@ -20,26 +22,53 @@ function usage()
     exit
 }
 
-#find $path -maxdepth $depth -name ""
+function sha1gen()
+{
+    shasum $1
+}
+
+function incrgen()
+{
+}
+
+function esc()
+{
+    echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'
+}
 
 NONE=0
+INCR=1
+SHA1=2
 
-flg=$NONE
-
-while getopts "d:p:gjpamw" opt
+while getopts "d:p:gjpamwsh" opt
 do
     case $opt in
 	'd') depth=$OPTARG ;;
+	'h') if [ -z $flg ]; then flg=$INCR; else usage; fi ;;
+	's') if [ -z $flg ]; then flg=$SHA1; else usage; fi ;;
 	'p') path=$OPTARG ;;
-	'g') type='gif' ;;
-	'j') type='jpg' ;;
-	'p') type='png' ;;
-	'a') type='avi ';;
-	'm') type='mkv' ;;
-	'w') type='wmv' ;;
+	'g') ext='gif' ;;
+	'j') ext='jpg' ;;
+	'p') ext='png' ;;
+	'a') ext='avi ';;
+	'm') ext='mkv' ;;
+	'w') ext='wmv' ;;
     esac
 done
     
 [ -z $depth ] && usage
 [ -z $path ] && usage
-[ -z $type ] && usage
+[ -z $ext ] && usage
+[ -z $flg ] && usage
+
+if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
+
+exit
+while f in `find $path -maxdepth $depth -type f -name "*.${ext}"`
+do
+    org="`esc $f`"
+    new="`$fnc $f`.${f##.*}"
+    # if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
+    echo $org $new
+
+done
