@@ -69,6 +69,8 @@ do
     org="`esc $f`"
     new="`$fnc $f`.${f##.*}"
     # if [ ! "$old" == "$new" ]; then  mv $olg $new; else echo "$f: skip"; fi
-    echo $org $new
+    echo "org: $org"
+    echo "new: $new"
+    echo
 
 done
