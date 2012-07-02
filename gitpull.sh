@@ -1,26 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
-function usage()
-{
-    printf "%s [project name]\n" $0
-    exit
-}
+repodir='/home/tomoaki/Developer'
+prj='1timeTransfer lib pwmgr social shellscript'
 
-uname='たなかともあき'
-email='git@bamboo-copter.com'
-id='jedi-master'
-pw='prince4712'
-
-prj=$1
-url="http://github.com/${account}/${prj}.git"
-
-[ -z $prj ] && usage
-
-git config --global user.name "$uname"
-git config --global user.email "$email"
-mkdir $prj
-cd $prj
-touch README
-git commit -m 'first commit'
-git remote add origin $url
-git push -u origin master
+for p in $prj
+do
+    cd ${repodir}/${p}
+    git pull origin master || echo "$p pull error" >> ~/gpull.log
+done
