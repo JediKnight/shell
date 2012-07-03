@@ -1,4 +1,4 @@
-decor='[] [     ]'
+decor='[] [      ]'
 
 function getbar()
 {
@@ -21,25 +21,36 @@ function getperc()
     expr \( $x \* 100 \) / $y
 }
 
+function proginit()
+{
+    tput civis
+}
+
+function progend()
+{
+    tput cnorm
+    tput cud1
+}
+
 function showprog()
 {
-    PERC=$1
-    BARCMP=$2
-    BARSPC=$3
+    perc=$1
+    strcmp=`getbar '#'`
+    strspc=`getbar '_'`
 
-    esc=''
-    line=10
     cols=`tput cols`
     cols=`expr $cols - ${#decor}`
+    cmpcnt=`expr \( $perc \* $cols \) / 100`
+    spccnt=`expr $cols - $cmpcnt`
 
-    cmpcnt=`expr \( $PERC \* $cols \) / 100`
-    spccnt=`expr \( \( 100 - $PERC \) \* $cols \) / 100`
-    barcmp=`echo "$BARCMP" | cut -c1-${cmpcnt} 2>/dev/null`
-    barspc=`echo "$BARSPC" | cut -c1-${spccnt} 2>/dev/null`
+    barcmp=`echo "$strcmp" | cut -c1-${cmpcnt} 2>/dev/null`
+    barspc=`echo "$strspc" | cut -c1-${spccnt} 2>/dev/null`
 
-    [ $PERC -gt 100 ] && exit
-    [ $PERC -eq 0 ] && barcmp=$BARSPC
+    [ $perc -gt 100 ] && exit
+    [ $perc -eq 0 ] && barcmp=$strspc
 
-#    printf "${esc}[${line};1H[%s%s] [ %3s%% ]${esc}[$line;1H" "$barcmp" "$barspc" "$PERC"
-    printf "${esc}[1;1H %s ${esc}[1;1H" $barcmp
+    tput dl1
+    tput sc
+    printf "[%s%s] [ %3s%% ]" $barcmp $barspc $perc
+    tput rc
 }

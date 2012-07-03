@@ -67,7 +67,7 @@ filecnt=`find $path -maxdepth $depth -type f -iname "*.${ext}" |wc -l`
 barc=`getbar '#'`
 bars=`getbar '_'`
 
-tput civis
+proginit
 
 i=0
 find $path -maxdepth $depth -type f -iname "*.${ext}" |while read f
@@ -77,7 +77,7 @@ do
     [ ! "$f" == "$new" ] && mv "$f" $new
 
     i=`expr $i + 1`
-    showprog `getperc $i $filecnt` $barc $bars
+    showprog `getperc $i $filecnt`
 done
 
-tput cnorm
+progend
