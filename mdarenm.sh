@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LANG=C
+
 function usage()
 {
     printf "%s\n" $0
@@ -24,17 +26,12 @@ function usage()
 
 function sha1gen()
 {
-    shasum "$1" | cut -d' ' -f1
+    shasum "$1" |cut -d' ' -f1
 }
 
 function incrgen()
 {
-    seq 1 10
-}
-
-function esc()
-{
-    echo $1 | sed -e 's| |\\\ |g' -e 's|(|\\\(|g' -e 's|)|\\\)|g'
+    expr $1 + 1
 }
 
 NONE=0
@@ -56,6 +53,8 @@ do
 	'w') ext='wmv' ;;
     esac
 done
+
+. ./statbar.fnc
     
 [ -z $depth ] && usage
 [ -z $path ] && usage
@@ -64,8 +63,21 @@ done
 
 if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 
-find $path -maxdepth $depth -type f -iname "*.${ext}" | while read f
+filecnt=`find $path -maxdepth $depth -type f -iname "*.${ext}" |wc -l`
+barc=`getbar '#'`
+bars=`getbar '_'`
+
+tput civis
+
+i=0
+find $path -maxdepth $depth -type f -iname "*.${ext}" |while read f
 do
+
     new="${path}/`$fnc \"$f\"`.${f##*.}"
-    [ ! "$org" == "$new" ] && mv "$f" $new
+    [ ! "$f" == "$new" ] && mv "$f" $new
+
+    i=`expr $i + 1`
+    showprog `getperc $i $filecnt` $barc $bars
 done
+
+tput cnorm
