@@ -54,7 +54,7 @@ do
     esac
 done
 
-. ./statbar.fnc
+. ./progress.fuc
     
 [ -z $depth ] && usage
 [ -z $path ] && usage
