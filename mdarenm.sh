@@ -64,8 +64,6 @@ done
 if [ $flg -eq $SHA1 ]; then fnc='sha1gen'; else fnc='incrgen'; fi
 
 filecnt=`find $path -maxdepth $depth -type f -iname "*.${ext}" |wc -l`
-barc=`getbar '#'`
-bars=`getbar '_'`
 
 proginit
 
@@ -74,10 +72,11 @@ find $path -maxdepth $depth -type f -iname "*.${ext}" |while read f
 do
 
     new="${path}/`$fnc \"$f\"`.${f##*.}"
-    [ ! "$f" == "$new" ] && mv "$f" $new
+    [ "$f" != "$new" ] && mv "$f" $new
 
     i=`expr $i + 1`
-    showprog `getperc $i $filecnt`
+    p=`getperc $i $filecnt`
+    showprog $p
 done
 
 progend
